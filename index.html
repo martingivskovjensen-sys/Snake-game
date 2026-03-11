@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Lobby - Multiplayer Arcade</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Login Screen -->
+    <div class="login-screen" id="loginScreen">
+        <h1>🎮 Multiplayer Arcade</h1>
+        <p>Choose your games</p>
+        <input type="text" id="usernameInput" placeholder="Enter username" maxlength="15">
+        <button onclick="joinGame()">Enter Lobby</button>
+    </div>
+
+    <!-- Main Lobby -->
+    <div class="lobby-container" id="lobbyContainer" style="display: none;">
+        <div class="lobby-sidebar">
+            <div class="player-profile">
+                <h2 id="displayUsername">Player</h2>
+                <p>Total Score: <span id="totalScore">0</span></p>
+            </div>
+            
+            <div class="create-room">
+                <h3>Create Room</h3>
+                <input type="text" id="roomNameInput" placeholder="Room name">
+                <select id="gameTypeSelect">
+                    <option value="snake">🐍 Snake</option>
+                    <option value="tictactoe">⭕ Tic-Tac-Toe</option>
+                    <option value="blackjack">🃏 Blackjack</option>
+                </select>
+                <button onclick="createRoom()">Create</button>
+            </div>
+            
+            <div class="leaderboard">
+                <h3>🏆 Top Scores</h3>
+                <ul id="leaderboardList"></ul>
+            </div>
+        </div>
+        
+        <div class="lobby-main">
+            <div class="rooms-section">
+                <h2>📚 Available Rooms</h2>
+                <div class="rooms-grid" id="roomsGrid"></div>
+            </div>
+            
+            <div class="quick-games">
+                <h2>⚡ Quick Play</h2>
+                <div class="game-cards">
+                    <div class="game-card" onclick="quickJoin('snake')">
+                        <h3>🐍 Snake</h3>
+                        <p>Classic snake game</p>
+                    </div>
+                    <div class="game-card" onclick="quickJoin('tictactoe')">
+                        <h3>⭕ Tic-Tac-Toe</h3>
+                        <p>2 player game</p>
+                    </div>
+                    <div class="game-card" onclick="quickJoin('blackjack')">
+                        <h3>🃏 Blackjack</h3>
+                        <p>Card game</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Container -->
+    <div class="game-container" id="gameContainer" style="display: none;">
+        <div class="game-header">
+            <button class="back-btn" onclick="leaveRoom()">← Back to Lobby</button>
+            <h2 id="roomName">Room</h2>
+            <div class="room-players" id="roomPlayers"></div>
+        </div>
+        
+        <!-- Snake Game -->
+        <div id="snakeGame" style="display: none;">
+            <canvas id="snakeCanvas" width="500" height="500"></canvas>
+            <div class="game-controls">
+                <p>Score: <span id="snakeScore">0</span></p>
+                <button onclick="startSnake()">Start Game</button>
+            </div>
+        </div>
+        
+        <!-- Tic-Tac-Toe Game -->
+        <div id="tttGame" style="display: none;">
+            <div class="ttt-status" id="tttStatus">Waiting for players...</div>
+            <div class="ttt-board" id="tttBoard"></div>
+            <button onclick="startTicTacToe()" id="tttStartBtn">Start Game</button>
+        </div>
+        
+        <!-- Blackjack Game -->
+        <div id="blackjackGame" style="display: none;">
+            <div class="bj-table">
+                <div class="dealer-hand" id="dealerHand"></div>
+                <div class="player-hand" id="playerHand"></div>
+                <div class="bj-controls" id="bjControls">
+                    <p>Chips: <span id="bjChips">1000</span></p>
+                    <button onclick="bjAction('deal')" id="dealBtn">Deal</button>
+                    <button onclick="bjAction('hit')" id="hitBtn" disabled>Hit</button>
+                    <button onclick="bjAction('stand')" id="standBtn" disabled>Stand</button>
+                </div>
+            </div>
+            <button onclick="startBlackjack()" id="bjStartBtn">Start Game</button>
+        </div>
+    </div>
+
+    <!-- Game Over Modal -->
+    <div class="game-over" id="gameOver" style="display: none;">
+        <h2>Game Over!</h2>
+        <p>Score: <span id="finalScore">0</span></p>
+        <button onclick="restartGame()">Play Again</button>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>
+
